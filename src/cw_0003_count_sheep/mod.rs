@@ -2,6 +2,7 @@
 * https://www.codewars.com/kata/5b077ebdaf15be5c7f000077/train/rust
 */
 
+#[allow(dead_code)]
 fn count_sheep(n: u32) -> String {
     let mut retval = String::new();
     for i in 1..=n {

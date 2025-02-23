@@ -3,6 +3,7 @@ pub struct ListNode {
     val: i32,
     next: Option<Box<ListNode>>,
 }
+#[allow(dead_code)]
 
 impl ListNode {
     fn new(val: i32) -> ListNode {

@@ -1,11 +1,4 @@
-/*
-pub fn warn_the_sheep(queue: &[&str]) -> String {
-    match queue.iter().rev().position(|&a| a == "wolf").unwrap() {
-        0 => format!("Pls go away and stop eating my sheep"),
-        n => format!("Oi! Sheep number {}! You are about to be eaten by a wolf!", n)
-    }
-}
-*/
+#[allow(dead_code)]
 pub fn warn_the_sheep(queue: &[&str]) -> String {
     let mut my_queue = vec![];
     for a in queue {
@@ -19,11 +12,13 @@ pub fn warn_the_sheep(queue: &[&str]) -> String {
             _ => i += 1,
         }
     }
-    let retval = match i {
-        0 =>  String::from("Pls go away and stop eating my sheep"),
-        _n =>  format!("Oi! Sheep number {}! You are about to be eaten by a wolf!",i),
-    };
-    retval
+    match i {
+        0 => String::from("Pls go away and stop eating my sheep"),
+        _n => format!(
+            "Oi! Sheep number {}! You are about to be eaten by a wolf!",
+            i
+        ),
+    }
 }
 
 #[cfg(test)]
@@ -33,7 +28,9 @@ mod tests {
     #[test]
     fn basic() {
         assert_eq!(
-            warn_the_sheep(&["sheep", "sheep", "sheep", "sheep", "sheep", "wolf", "sheep", "sheep"]),
+            warn_the_sheep(&[
+                "sheep", "sheep", "sheep", "sheep", "sheep", "wolf", "sheep", "sheep"
+            ]),
             "Oi! Sheep number 2! You are about to be eaten by a wolf!",
         );
         assert_eq!(

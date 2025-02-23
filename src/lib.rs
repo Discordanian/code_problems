@@ -11,6 +11,5 @@ pub mod cw_0002_wolf_in_sheep_clothing;
 pub use cw_0002_wolf_in_sheep_clothing::*;
 
 pub mod cw_0003_count_sheep;
-pub use cw_0003_count_sheep::*;
 pub mod cw_0004_sum_of_diff;
 // pub use cw_0004_sum_of_diff::*;
