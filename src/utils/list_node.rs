@@ -4,7 +4,6 @@ pub struct ListNode {
     next: Option<Box<ListNode>>,
 }
 #[allow(dead_code)]
-
 impl ListNode {
     fn new(val: i32) -> ListNode {
         ListNode { val, next: None }
