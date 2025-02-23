@@ -3,6 +3,7 @@
 * https://www.codewars.com/kata/5b73fe9fb3d9776fbf00009e/train/rust
 */
 
+#[allow(dead_code)]
 fn sum_of_differences(arr: &[i8]) -> Option<i8> {
     if arr.len() < 2 {
         return None;
