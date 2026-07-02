@@ -17,3 +17,5 @@ pub mod cw_0004_sum_of_diff;
 pub mod cw_0005_pillars;
 
 pub mod cw_0006_the_lost_beginning;
+
+pub mod cw_0002_mr_right;
