@@ -19,3 +19,6 @@ pub mod cw_0005_pillars;
 pub mod cw_0006_the_lost_beginning;
 
 pub mod cw_0002_mr_right;
+
+pub mod cw_0007_evaluate_mathematical_expression;
+pub use cw_0007_evaluate_mathematical_expression::*;
