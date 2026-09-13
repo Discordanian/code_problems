@@ -37,27 +37,52 @@ This is no ordinary magic (the Elder's life is at stake), so you need to care ab
 */
 
 pub fn elder_age(m: u64, n: u64, l: u64, t: u64) -> u64 {
-    (rect_sum(m, n, l).rem_euclid(t as i128)) as u64
+    if t == 0 {
+        return 0;
+    }
+    rect_sum(m, n, l, t)
 }
 
-fn next_pow2(x: u64) -> u64 {
-    let mut p = 1u64;
+fn next_pow2(x: u64) -> u128 {
+    let mut p = 1u128;
+    let x = x as u128;
     while p < x {
         p <<= 1;
     }
     p
 }
 
-fn range_sum(lo: i128, hi: i128) -> i128 {
-    if hi < lo {
-        0
-    } else {
-        (lo + hi) * (hi - lo + 1) / 2
-    }
+fn add_mod(a: u64, b: u64, t: u64) -> u64 {
+    ((a as u128 + b as u128) % t as u128) as u64
 }
 
-/// Sum of max(0, (i ^ j) - l) over i in 0..m, j in 0..n.
-fn rect_sum(mut m: u64, mut n: u64, l: u64) -> i128 {
+fn sub_mod(a: u64, b: u64, t: u64) -> u64 {
+    ((a as u128 + t as u128 - b as u128) % t as u128) as u64
+}
+
+fn mul_mod(a: u128, b: u128, t: u64) -> u64 {
+    let t = t as u128;
+    ((a % t) * (b % t) % t) as u64
+}
+
+/// Arithmetic series (lo + ... + hi) modulo t. Divides by 2 before reducing
+/// so this stays correct when t is even.
+fn range_sum_mod(lo: i128, hi: i128, t: u64) -> u64 {
+    if hi < lo {
+        return 0;
+    }
+    let mut a = (lo + hi) as u128;
+    let mut b = (hi - lo + 1) as u128;
+    if a % 2 == 0 {
+        a /= 2;
+    } else {
+        b /= 2;
+    }
+    mul_mod(a, b, t)
+}
+
+/// Sum of max(0, (i ^ j) - l) over i in 0..m, j in 0..n, modulo t.
+fn rect_sum(mut m: u64, mut n: u64, l: u64, t: u64) -> u64 {
     if m == 0 || n == 0 {
         return 0;
     }
@@ -67,27 +92,56 @@ fn rect_sum(mut m: u64, mut n: u64, l: u64) -> i128 {
 
     let ln = next_pow2(n);
     let mut lm = next_pow2(m);
-    if l > ln {
+    let l128 = l as u128;
+    if l128 > ln {
         return 0;
     }
 
     if lm == ln {
-        return range_sum(1, ln as i128 - l as i128 - 1) * (m + n - ln) as i128
-            + rect_sum(ln - n, lm - m, l);
+        let series = range_sum_mod(1, ln as i128 - l as i128 - 1, t);
+        let count = m as u128 + n as u128 - ln;
+        return add_mod(
+            mul_mod(series as u128, count, t),
+            rect_sum((ln - n as u128) as u64, (lm - m as u128) as u64, l, t),
+            t,
+        );
     }
 
     lm = ln / 2;
-    let mut total = range_sum(1, ln as i128 - l as i128 - 1) * m as i128
-        - (ln - n) as i128
-            * range_sum((lm as i128 - l as i128).max(0), ln as i128 - l as i128 - 1);
+    let mut total = mul_mod(
+        range_sum_mod(1, ln as i128 - l as i128 - 1, t) as u128,
+        m as u128,
+        t,
+    );
+    total = sub_mod(
+        total,
+        mul_mod(
+            ln - n as u128,
+            range_sum_mod((lm as i128 - l as i128).max(0), ln as i128 - l as i128 - 1, t)
+                as u128,
+            t,
+        ),
+        t,
+    );
 
-    if l <= lm {
-        total += (lm - l) as i128 * (lm - m) as i128 * (ln - n) as i128
-            + rect_sum(lm - m, ln - n, 0);
+    if l128 <= lm {
+        total = add_mod(
+            total,
+            mul_mod(
+                mul_mod(lm - l128, lm - m as u128, t) as u128,
+                ln - n as u128,
+                t,
+            ),
+            t,
+        );
+        add_mod(total, rect_sum((lm - m as u128) as u64, (ln - n as u128) as u64, 0, t), t)
     } else {
-        total += rect_sum(lm - m, ln - n, l - lm);
+        add_mod(
+            total,
+            rect_sum((lm - m as u128) as u64, (ln - n as u128) as u64, l - lm as u64, t),
+            t,
+        )
     }
-    total
 }
 
 #[cfg(test)]
@@ -107,6 +161,10 @@ mod tests {
         assert_eq!(
             elder_age(28827050410, 35165045587, 7109602, 13719506),
             5456283
+        );
+        assert_eq!(
+            elder_age(1630029867390898003, 2001333086544497128, 533501, 978505085),
+            446863989
         );
     }
 
