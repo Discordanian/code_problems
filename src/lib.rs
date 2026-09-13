@@ -28,3 +28,6 @@ pub use cw_0008_insane_coloured_triangles::*;
 
 pub mod cw_0009_become_immortal;
 pub use cw_0009_become_immortal::*;
+
+pub mod cw_0010_sliding_puzzle_solver;
+pub use cw_0010_sliding_puzzle_solver::*;
