@@ -22,3 +22,6 @@ pub mod cw_0002_mr_right;
 
 pub mod cw_0007_evaluate_mathematical_expression;
 pub use cw_0007_evaluate_mathematical_expression::*;
+
+pub mod cw_0008_insane_coloured_triangles;
+pub use cw_0008_insane_coloured_triangles::*;
