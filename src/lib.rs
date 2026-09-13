@@ -25,3 +25,6 @@ pub use cw_0007_evaluate_mathematical_expression::*;
 
 pub mod cw_0008_insane_coloured_triangles;
 pub use cw_0008_insane_coloured_triangles::*;
+
+pub mod cw_0009_become_immortal;
+pub use cw_0009_become_immortal::*;
